@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Which light are you? · Soul Nine personality test</title>
+<meta name="description" content="A free 2-minute personality test set on a misty island. Ten moments, one reflection of who you are. From the game Soul Nine.">
+<meta name="theme-color" content="#061a22">
+<!-- OG:START (written by `npm run build` from site.config.js) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Which light are you? · Soul Nine personality test">
+<meta property="og:description" content="Ten moments on a misty island. One reflection of who you are. Free, 2 minutes.">
+<meta property="og:image" content="https://soulnine.example/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://soulnine.example/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://soulnine.example/og/default.jpg">
+<!-- OG:END -->
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/cormorant-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="motes" aria-hidden="true"></canvas>
+<div class="mist" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="logo" href="./" aria-label="Soul Nine, start page">Soul Nine</a>
+  <button id="sound" class="icon-btn" type="button" aria-pressed="false" aria-label="Ambient sound off">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+</header>
+
+<main id="app">
+  <p id="live" class="sr-only" aria-live="polite"></p>
+
+  <!-- Intro -->
+  <section id="intro" class="screen" hidden aria-labelledby="intro-title">
+    <p id="invite" class="invite" hidden></p>
+    <p class="eyebrow">A personality test from the Isle of Inner Light</p>
+    <h1 id="intro-title" tabindex="-1">Which light are you?</h1>
+    <p class="lead">Ten quiet moments on a misty island. Answer with your first instinct, and see the light that guides you.</p>
+    <button id="start" class="btn primary" type="button">Begin</button>
+    <p class="meta">10 questions · about 2 minutes · free · no sign-up</p>
+    <p class="fine">Based on the Enneagram, a nine-type personality model.</p>
+  </section>
+
+  <!-- Question -->
+  <section id="question" class="screen" hidden aria-labelledby="q-text">
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+    <p id="q-count" class="eyebrow"></p>
+    <h2 id="q-text" tabindex="-1"></h2>
+    <div id="options" class="options" role="group" aria-labelledby="q-text"></div>
+    <button id="back" class="link-btn" type="button">← Back</button>
+  </section>
+
+  <!-- Reveal -->
+  <section id="reveal" class="screen reveal" hidden aria-hidden="true">
+    <p class="reveal-line">The mist begins to part…</p>
+  </section>
+
+  <!-- Result -->
+  <section id="result" class="screen result" hidden aria-labelledby="r-name">
+    <canvas id="r-sigil" class="sigil" width="560" height="560" aria-hidden="true"></canvas>
+    <p class="eyebrow" id="r-eyebrow">Your light is</p>
+    <h1 id="r-name" tabindex="-1"></h1>
+    <p id="r-tagline" class="tagline"></p>
+    <p id="r-wing" class="wing"></p>
+    <p id="r-close" class="close-call" hidden></p>
+    <ul id="r-core" class="core"></ul>
+    <p id="r-shadow" class="shadow"></p>
+    <p id="r-share" class="type-share" hidden></p>
+
+    <div id="r-compare" class="compare-cta" hidden>
+      <button id="see-pair" class="btn primary" type="button"></button>
+    </div>
+
+    <div class="cta-box">
+      <p id="r-growth" class="growth"></p>
+      <a id="steam" class="btn steam" href="#" target="_blank" rel="noopener">Wishlist Soul Nine on Steam</a>
+      <a id="trailer" class="link-btn" href="#" target="_blank" rel="noopener" hidden>Watch the trailer</a>
+    </div>
+
+    <h3 class="section-title">Share your light</h3>
+    <div class="share">
+      <button id="share-story" class="btn" type="button">Share card (story)</button>
+      <button id="share-square" class="btn" type="button">Share card (square)</button>
+      <button id="copy-link" class="btn ghost" type="button">Copy link</button>
+      <button id="compare-friend" class="btn ghost" type="button">Compare with a friend</button>
+    </div>
+    <p id="toast" class="toast" role="status" aria-live="polite"></p>
+
+    <details class="mix">
+      <summary>How your answers spread across all nine</summary>
+      <ul id="r-mix"></ul>
+    </details>
+
+    <p id="r-small" class="fine"></p>
+    <button id="retake" class="link-btn" type="button">Take it again</button>
+  </section>
+
+  <!-- A friend's shared result -->
+  <section id="friend" class="screen result" hidden aria-labelledby="f-name">
+    <canvas id="f-sigil" class="sigil" width="560" height="560" aria-hidden="true"></canvas>
+    <p class="eyebrow">Someone shared their light</p>
+    <h1 id="f-name" tabindex="-1"></h1>
+    <p id="f-tagline" class="tagline"></p>
+    <p id="f-wing" class="wing"></p>
+    <ul id="f-core" class="core"></ul>
+    <button id="f-start" class="btn primary" type="button">Take the test yourself</button>
+    <p class="meta">See your own light, then how the two of you fit together.</p>
+    <p id="f-small" class="fine"></p>
+  </section>
+
+  <!-- Pair -->
+  <section id="pair" class="screen result" hidden aria-labelledby="p-title">
+    <div class="pair-sigils">
+      <figure><canvas id="p-sigil-a" class="sigil small" width="320" height="320" aria-hidden="true"></canvas><figcaption id="p-a"></figcaption></figure>
+      <span class="plus" aria-hidden="true">+</span>
+      <figure><canvas id="p-sigil-b" class="sigil small" width="320" height="320" aria-hidden="true"></canvas><figcaption id="p-b"></figcaption></figure>
+    </div>
+    <h1 id="p-title" tabindex="-1"></h1>
+    <div id="p-lines" class="pair-lines"></div>
+    <a id="p-steam" class="btn steam" href="#" target="_blank" rel="noopener">Explore both lights in Soul Nine</a>
+    <button id="p-back" class="link-btn" type="button">← Back to my result</button>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>For fun and self-reflection, not a clinical or professional assessment.</p>
+  <p id="socials" class="socials"></p>
+  <p class="fine">© Soul Nine · Enneagram-based · Your answers stay in your browser.</p>
+</footer>
+
+<canvas id="card-canvas" hidden></canvas>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
